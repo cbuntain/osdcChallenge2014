@@ -86,22 +86,9 @@ plot(projection,pch=rep(c(0,1,2),each=50),ylab="component 2", xlab = "component 
 main="Projection of Y onto first two columns of H")
 lines(means_b %*% H[,1:2],type="p",pch=c(15,16,17))
 lines(means_all %*%H[,1:2],type="p",pch=8,cex=2)
-```
-
-The overall mean is the "star" figure in the middle, and group means are the shaded-in shapes. 
-
-The computed probability for the mean vector, with $\lambda$ = 1 and $\theta$ = 5, is:
-```{r mean_vector}
 pred_mean <- as.data.frame(t(round(classdist(means_all,lambda=1,theta=5,sig_b,sig_w),digits=4)))
 names(pred_mean) <- flower_names
 pred_mean
-```
-
-We see intuitively from the plot that the predicted probability is no where near (1/3,1/3,1/3,0): The mean value lies on the  outer edge of the versicolor distribution and is classified as such.
-
-(vi)
-Using exactly the syntax that you requested:
-```{r vi,echo=TRUE}
 plot(svd(iris)$u, cex=.5,col=rep(c(0,1,2),each=50),main="First two components of SVD")
 ```
 
