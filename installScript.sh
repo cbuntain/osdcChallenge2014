@@ -43,11 +43,19 @@ sudo apt-get install r-base
 #Install the version of libcurl that actually works
 sudo apt-get install libcurl4-gnutls-dev
 
+echo "About to install additional R packages"
+echo ""
+read -p "Press any key to continue... " -n1 -s
+
 sudo echo 'install.packages("httr", repos="http://cran.rstudio.com/")' | R --no-save
 sudo echo 'install.packages("RCurl", repos="http://cran.rstudio.com/")' | R --no-save
 sudo echo 'install.packages("devtools", repos="http://cran.rstudio.com/")' | R --no-save
 
 sudo echo 'options(repos="http://cran.us.r-project.org"); devtools::install_github("rstudio/rmarkdown")' | R --no-save
+
+echo "Setting up Dropbox client"
+echo ""
+read -p "Press any key to continue... " -n1 -s
 
 # Dropbox setup on a headless Ubuntu Server
 # Script written by Jesse B. Hannah (http://jbhannah.net) <jesse@jbhannah.net>
@@ -77,10 +85,10 @@ sudo echo 'options(repos="http://cran.us.r-project.org"); devtools::install_gith
 
 # Download and extract the Dropbox daemon itself into a system location
 sudo mkdir -p /usr/local/dropbox
-sudo wget -qO- http://www.dropbox.com/download/?plat=lnx.x86_64 | tar xz --strip 1 -C /usr/local/dropbox
+wget -qO- http://www.dropbox.com/download/?plat=lnx.x86_64 | sudo tar xz --strip 1 -C /usr/local/dropbox
 
 sudo useradd -r -m -d /etc/dropbox -U -s /bin/false dropbox
-sudo chown dropbox.dropbox /etc/dropbox
+sudo chown dropbox /etc/dropbox
 sudo chmod 700 /etc/dropbox
 
 sudo cp dropbox.py /usr/bin/dropbox.py
