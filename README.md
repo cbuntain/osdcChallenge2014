@@ -10,11 +10,8 @@ R
 Requirements
 ----------
 
-`setupR.sh`
-From within R:
-`install.packages("devtools")
-`devtools::install_github("rstudio/rmarkdown")`
-
+The setup script should install all requirements EXCEPT for the pandoc version 1.12 required by Rmarkdown.
+I've installed pandoc on the mayfly_v1 image on osdc 
 
 
 Usage for R
