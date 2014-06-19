@@ -47,11 +47,11 @@ echo "About to install additional R packages"
 echo ""
 read -p "Press any key to continue... " -n1 -s
 
-sudo echo 'install.packages("httr", repos="http://cran.rstudio.com/")' | R --no-save
-sudo echo 'install.packages("RCurl", repos="http://cran.rstudio.com/")' | R --no-save
-sudo echo 'install.packages("devtools", repos="http://cran.rstudio.com/")' | R --no-save
+echo 'install.packages("httr", repos="http://cran.rstudio.com/")' | sudo R --no-save
+echo 'install.packages("RCurl", repos="http://cran.rstudio.com/")' | sudo R --no-save
+echo 'install.packages("devtools", repos="http://cran.rstudio.com/")' | sudo R --no-save
 
-sudo echo 'options(repos="http://cran.us.r-project.org"); devtools::install_github("rstudio/rmarkdown")' | R --no-save
+echo 'options(repos="http://cran.us.r-project.org"); devtools::install_github("rstudio/rmarkdown")' | sudo R --no-save
 
 echo "Setting up Dropbox client"
 echo ""
