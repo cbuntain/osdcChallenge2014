@@ -57,6 +57,7 @@ echo 'options(repos="http://cran.us.r-project.org"); devtools::install_github("r
 echo "Setting up Dropbox client"
 echo ""
 read -p "Press any key to continue... " -n1 -s
+echo ""
 
 # Dropbox setup on a headless Ubuntu Server
 # Script written by Jesse B. Hannah (http://jbhannah.net) <jesse@jbhannah.net>
@@ -90,6 +91,9 @@ wget -qO- http://www.dropbox.com/download/?plat=lnx.x86_64 | sudo tar xz --strip
 
 sudo useradd -r -m -d /etc/dropbox -U -s /bin/false dropbox
 sudo chown dropbox /etc/dropbox
-sudo chmod 700 /etc/dropbox
+sudo chmod 770 /etc/dropbox
 
 sudo cp dropbox.py /usr/bin/dropbox.py
+sudo chmod +x /usr/bin/dropbox.py
+
+sudo usermod -a -G dropbox ubuntu

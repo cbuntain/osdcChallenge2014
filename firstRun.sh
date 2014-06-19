@@ -13,15 +13,10 @@ echo "After success, press CTRL+C to exit and continue with installation."
 echo ""
 read -p "Press any key to continue... " -n1 -s
 
-sudo su -l dropbox -s /bin/bash
-umask 0027
-/usr/local/dropbox/dropboxd
-# Open the URL dropboxd gives you in a browser to link it to your account
-# Exit dropboxd with C-c AFTER you've done this
-exit
+sudo -u dropbox HOME=/etc/dropbox/ -s /bin/bash /usr/local/dropbox/dropboxd
 # If you're OCD, you can remove everything from /etc/dropbox except .dropbox and Dropbox now
 
-sudo cat <<EOF | sed -e "s,%,$,g" >/etc/init/dropbox.conf
+sudo cat <<EOF | sed -e "s,%,$,g" >/tmp/dropbox.conf
 # Dropbox upstart script
 
 description "Dropbox"
@@ -46,5 +41,8 @@ script
     exec su -s /bin/sh -c /usr/local/dropbox/dropbox dropbox
 end script
 EOF
+sudo mv /tmp/dropbox.conf /etc/init/dropbox.conf
 
 sudo start dropbox
+
+sudo chmod -R g+rwx /etc/dropbox
