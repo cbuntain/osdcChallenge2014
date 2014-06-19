@@ -47,6 +47,7 @@ echo "About to install additional R packages"
 echo ""
 read -p "Press any key to continue... " -n1 -s
 
+echo 'install.packages("codetools", repos="http://cran.rstudio.com/")' | sudo R --no-save
 echo 'install.packages("httr", repos="http://cran.rstudio.com/")' | sudo R --no-save
 echo 'install.packages("RCurl", repos="http://cran.rstudio.com/")' | sudo R --no-save
 echo 'install.packages("devtools", repos="http://cran.rstudio.com/")' | sudo R --no-save
