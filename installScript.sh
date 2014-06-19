@@ -27,7 +27,24 @@
 
 # Install IPython base
 sudo apt-get update
-sudo apt-get install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose 
+sudo apt-get install python-setuptools 
+sudo apt-get install build-essential
+sudo apt-get install python-dev
+sudo apt-get install libatlas-base-dev
+sudo apt-get install gfortran
+
+# Installing IPython and dependencies
+sudo easy_install ipython
+sudo easy_install numpy
+sudo easy_install atlas
+sudo easy_install scipy 
+sudo easy_install matplotlib 
+sudo easy_install ipython-notebook 
+sudo easy_install pandas 
+sudo easy_install sympy 
+sudo easy_install nose 
+sudo easy_install pygments
+sudo easy_install jinja2
 
 # Grabs your version of Ubuntu as a BASH variable
 CODENAME=`grep CODENAME /etc/lsb-release | cut -c 18-`
