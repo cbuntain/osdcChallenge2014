@@ -1,0 +1,92 @@
+
+`r opts_chunk$set(message = FALSE,echo=FALSE,comment="",cache=TRUE)`
+
+```{r setup, cache=FALSE,echo=FALSE,comment=""}
+require(mvtnorm)
+
+#all data
+setwd('.')
+source('loaddata.R')
+rm(data)
+#we have "iris" and "variety" 
+
+means_all <- colMeans(iris)
+#print("estimated mean vector:")
+#print(means_all,digits=4)
+
+#compute sig_within:
+#I think this is right?!
+sig_w <- (cov(iris[1:50,]) + cov(iris[51:100,]) + cov(iris[101:150,])) / 3
+
+#compute sig_between:
+n_b <- 50 #same for all, so this makes dimensions a little bit easier
+means_b <- rbind(
+colMeans(iris[1:50,]) , colMeans(iris[51:100,]) , colMeans(iris[101:150,]))
+
+sig_b <- cov(means_b)
+
+#eigen(sig_b) # :)
+
+
+
+#print(sig_w,digits=2)
+
+# Load new data
+
+iris_pred <- matrix(c(
+6.3, 2.9, 4.9, 1.7,
+5.5, 3.1, 2.9, 0.8,
+5.8, 3.2, 3.5, 1.1,
+5.6, 3.2, 3.2, 1.0), ncol=4, byrow=T)
+
+#Question ii? 
+
+##Now we need to create the table!
+flower_names = c(unique(variety),"other")
+
+
+
+
+classdist <- function(y,lambda,theta,s_b,s_w){
+  mu_b <- t(means_all + t(n_b*theta*means_b)) / (1+n_b*theta) #means_all, means_b is global
+	sighat_b <- s_w*( 1 + theta/(1+n_b*theta))
+	res <- c(
+	n_b*dmvnorm(y-mu_b[1,],sigma = sighat_b),
+	n_b*dmvnorm(y-mu_b[2,],sigma = sighat_b),
+	n_b*dmvnorm(y-mu_b[3,],sigma = sighat_b),
+	lambda*dmvnorm(y-means_all,sigma=sig_w*(1+theta))
+	)
+	return(res/sum(res))
+}
+
+
+#test it once:
+#classdist(means_b[3,],lambda=1,theta=5,sig_b,sig_w)
+
+
+#this poops out the whole table at once. 
+res1 <- as.data.frame(t(apply(iris_pred,MARGIN=1,FUN=classdist,lambda=1,theta=5,s_b = sig_b, s_w = sig_w)))
+names(res1) <- flower_names
+#try with a different value of theta
+res2 <- as.data.frame(t(apply(iris_pred,MARGIN=1,FUN=classdist,lambda=1,theta=7, s_b = sig_b, s_w = sig_w)))
+names(res2) <- flower_names
+
+
+
+#iv:
+
+#eigen(solve(sig_w)%*%sig_b)
+
+
+H <- Re(eigen(solve(sig_w)%*%sig_b)$vectors)
+
+projection <- as.matrix(iris) %*% H[,1:2]
+
+plot(projection,pch=rep(c(0,1,2),each=50),ylab="component 2", xlab = "component 1",
+main="Projection of Y onto first two columns of H")
+lines(means_b %*% H[,1:2],type="p",pch=c(15,16,17))
+lines(means_all %*%H[,1:2],type="p",pch=8,cex=2)
+pred_mean <- as.data.frame(t(round(classdist(means_all,lambda=1,theta=5,sig_b,sig_w),digits=4)))
+names(pred_mean) <- flower_names
+pred_mean
+plot(svd(iris)$u, cex=.5,col=rep(c(0,1,2),each=50),main="First two components of SVD")
