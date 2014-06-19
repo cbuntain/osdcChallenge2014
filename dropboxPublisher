@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+import os
+import sys
+import subprocess
+
+DROPBOX_DIR="/etc/dropbox/Dropbox/Public"
+
+IPYTHON_CONVERT_CMD=["ipython", "nbconvert", "--to", "html"]
+DROPBOX_PUBURL_CMD=["dropbox.py", "puburl"]
+
+if ( len(sys.argv) < 2 ):
+	print "Usage: %s <input_file>" % sys.argv[0]
+	exit(1)
+
+inputFile = sys.argv[1]
+htmlFile = None
+if ( inputFile.endswith(".ipynb") ):
+
+	# Convert to HTML using ipython
+	convertCmd = IPYTHON_CONVERT_CMD + [inputFile]
+	retVal = subprocess.call(convertCmd, shell=True)
+
+	if ( retVal != 0 ):
+		print "Error converting file!"
+		exit(retVal)
+		
+	outputFilename = inputFile[:-6]
+	htmlFile = "%s.html" % outputFilename
+
+elif ( inputFile.endswith(".Rmd") ):
+
+	# Convert to HTML using knit.sh
+	outputFilename = inputFile[:-4]
+	htmlFile = "%s.html" % outputFilename
+
+# Now we move the HTML file to Dropbox's public directory
+destFile = ("%s/%s" % (DROPBOX_DIR, htmlFile))
+moveCmd = ["mv", htmlFile, destFile]
+subprocess.call(moveCmd)
+
+# Now get the public URL using dropbox.py
+getPuburlCmd = DROPBOX_PUBURL_CMD + [destFile]
+publicUrl = subprocess.check_output(getPuburlCmd)
+publicUrl = publicUrl.strip()
+
+print "You can now share %s using the following URL:\n\n%s\n" % (destFile, publicUrl)
+
+
