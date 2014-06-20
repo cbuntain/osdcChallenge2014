@@ -49,4 +49,3 @@ sudo start dropbox
 sleep 5
 
 sudo chmod -R g+rwx /etc/dropbox
-sudo chmod -R g+rwx /etc/dropbox/.*
