@@ -19,7 +19,7 @@ if ( inputFile.endswith(".ipynb") ):
 
 	# Convert to HTML using ipython
 	convertCmd = IPYTHON_CONVERT_CMD + [inputFile]
-	retVal = subprocess.call(convertCmd, shell=True)
+	retVal = subprocess.call(convertCmd)
 
 	if ( retVal != 0 ):
 		print "Error converting file!"
