@@ -16,7 +16,7 @@ read -p "Press any key to continue... " -n1 -s
 sudo -u dropbox HOME=/etc/dropbox/ -s /bin/bash /usr/local/dropbox/dropboxd
 # If you're OCD, you can remove everything from /etc/dropbox except .dropbox and Dropbox now
 
-sudo cat <<EOF | sed -e "s,%,$,g" >/tmp/dropbox.conf
+cat <<EOF | sed -e "s,%,$,g" > /tmp/dropbox.conf
 # Dropbox upstart script
 
 description "Dropbox"
@@ -41,7 +41,7 @@ script
     exec su -s /bin/sh -c /usr/local/dropbox/dropbox dropbox
 end script
 EOF
-sudo mv /tmp/dropbox.conf /etc/init/dropbox.conf
+sudo cp /tmp/dropbox.conf /etc/init/dropbox.conf
 
 echo "Starting Dropbox..."
 sudo start dropbox
